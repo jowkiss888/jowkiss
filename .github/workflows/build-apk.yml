@@ -1,34 +1,40 @@
-name: One Click Build
+name: Build APK
 on: [workflow_dispatch]
-
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create test files
+      - name: Create minimal files
         run: |
-          echo "from kivy.app import App" > main.py
-          echo "from kivy.uix.label import Label" >> main.py
-          echo "class TestApp(App):" >> main.py
-          echo "    def build(self):" >> main.py
-          echo "        return Label(text='APK Test Success!')" >> main.py
-          echo "TestApp().run()" >> main.py
+          cat << 'EOF' > main.py
+          from kivy.app import App
+          from kivy.uix.label import Label
+
+          class MainApp(App):
+              def build(self):
+                  return Label(text='APK Test Success!')
+
+          if __name__ == '__main__':
+              MainApp().run()
+          EOF
           
-          echo "[app]" > buildozer.spec
-          echo "title = Test" >> buildozer.spec
-          echo "package.name = test" >> buildozer.spec
-          echo "package.domain = org.test" >> buildozer.spec
-          echo "source.dir = ." >> buildozer.spec
-          echo "source.include_exts = py" >> buildozer.spec
-          echo "version = 0.1" >> buildozer.spec
-          echo "requirements = python3,kivy" >> buildozer.spec
-          echo "android.api = 33" >> buildozer.spec
-          echo "android.minapi = 21" >> buildozer.spec
-          echo "android.ndk = 25b" >> buildozer.spec
-          echo "android.archs = arm64-v8a" >> buildozer.spec
-          echo "android.accept_sdk_license = True" >> buildozer.spec
+          cat << 'EOF' > buildozer.spec
+          [app]
+          title = Test
+          package.name = test
+          package.domain = org.test
+          source.dir = .
+          source.include_exts = py
+          version = 0.1
+          requirements = python3,kivy
+          android.api = 30
+          android.minapi = 21
+          android.ndk = 25b
+          android.archs = arm64-v8a
+          android.accept_sdk_license = True
+          EOF
 
       - name: Install dependencies
         run: |
