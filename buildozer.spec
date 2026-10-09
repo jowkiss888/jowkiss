@@ -16,7 +16,7 @@ source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
 
 # --- 核心依赖（已移除 pymssql，添加了 requests 用于网络请求）---
-requirements = python3,kivy==2.3.0
+requirements = python3,kivy
 
 # 屏幕方向：竖屏
 orientation = portrait
