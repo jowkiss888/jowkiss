@@ -9,18 +9,29 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
+      - name: 设置 Python
+        uses: actions/setup-python@v5
         with:
-          workdir: .
-          buildozer_version: stable
+          python-version: '3.9'
 
-      - name: Upload APK
+      - name: 安装系统依赖
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+
+      - name: 安装 Buildozer
+        run: |
+          pip install --upgrade cython==0.29.36 buildozer
+
+      - name: 执行打包
+        run: |
+          yes | buildozer android debug
+
+      - name: 上传 APK
         uses: actions/upload-artifact@v4
         with:
           name: kivy-apk
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: bin/*.apk
