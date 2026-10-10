@@ -4,7 +4,6 @@ package.name = samplerecord
 package.domain = com.example
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,ttc,ttf
-source.include_patterns = fonts/*.ttc
 version = 0.1
 requirements = python3,kivy,requests,urllib3,chardet,idna,certifi,openssl
 orientation = portrait
