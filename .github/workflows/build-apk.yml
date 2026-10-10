@@ -1,24 +1,25 @@
-name: Final Build Test
-on: [workflow_dispatch]
+name: Build Kivy APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-android:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create test files
-        run: |
-          printf 'from kivy.app import App\nfrom kivy.uix.label import Label\n\nclass TestApp(App):\n    def build(self):\n        return Label(text="APK Test Success!")\n\nif __name__ == "__main__":\n    TestApp().run()\n' > main.py
-          printf '[app]\ntitle = Test\npackage.name = test\npackage.domain = org.test\nsource.dir = .\nsource.include_exts = py\nversion = 0.1\nrequirements = python3,kivy\nandroid.api = 30\nandroid.minapi = 21\nandroid.ndk = 25b\nandroid.archs = arm64-v8a\nandroid.accept_sdk_license = True\n' > buildozer.spec
-
-      - name: Build APK
+      - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
         with:
-          command: android debug
+          workdir: .
+          buildozer_version: stable
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: test-apk
-          path: bin/*.apk
+          name: package
+          path: ${{ steps.buildozer.outputs.filename }}
