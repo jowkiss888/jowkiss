@@ -12,17 +12,12 @@ jobs:
       - name: 检出仓库代码
         uses: actions/checkout@v4
 
-      - name: 设置 Python 环境
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.9'
-
       - name: 安装系统依赖
         run: |
           sudo apt-get update
           sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
 
-      - name: 安装 Buildozer 与适配版 jnius
+      - name: 安装 Buildozer
         run: |
           pip install buildozer
           pip install "jnius>=1.4.0"
