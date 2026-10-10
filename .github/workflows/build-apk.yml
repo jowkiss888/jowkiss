@@ -24,7 +24,7 @@ jobs:
 
       - name: 安装 Buildozer
         run: |
-          pip install --upgrade cython==0.29.36 buildozer
+          pip install --upgrade buildozer
 
       - name: 执行打包
         run: |
